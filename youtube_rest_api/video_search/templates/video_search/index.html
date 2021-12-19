@@ -1,75 +1,150 @@
-{% load static %}
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Search YouTube</title>
-    <!-- Bootstrap core CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <style>
-      .bd-placeholder-img {
-        font-size: 1.125rem;
-        text-anchor: middle;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <meta name="Prashant Rastogi" content="" />
+  <title>Feed from Youtube</title>
+
+  {% load static %}
+  <link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/dashboard/" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="{% static 'DataTables/datatables.min.css' %}" />
+
+  <script type="text/javascript" src="{% static 'DataTables/datatables.min.js' %}"></script>
+  <script src="{% static 'dashboard.js' %}"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link href="{% static 'assets/dist/css/bootstrap.min.css' %}" rel="stylesheet" />
+
+  <style>
+    .bd-placeholder-img {
+      font-size: 1.125rem;
+      text-anchor: middle;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+
+    @media (min-width: 768px) {
+      .bd-placeholder-img-lg {
+        font-size: 3.5rem;
       }
+    }
+  </style>
+  <!-- Custom styles for this template -->
+  <link href="{% static 'dashboard.css' %}" rel="stylesheet" />
+</head>
 
-      @media (min-width: 768px) {
-        .bd-placeholder-img-lg {
-          font-size: 3.5rem;
-        }
-      }
-    </style>
-    <!-- Custom styles for this template -->
-    <link href="{% static 'video_search/album.css' %}" rel="stylesheet">
-  </head>
-  <body>
+<body>
+  <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+    <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="#">Live Feed</a>
+    <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse"
+      data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-<main role="main">
+    <ul class="navbar-nav px-3"></ul>
+  </nav>
 
-  <section class="jumbotron text-center">
-    <div class="container">
-      <h1 class="jumbotron-heading">Search YouTube</h1>
-      <p class="lead text-muted">Get the top results on YouTube for your query!</p>
-      <form method="POST">
-      <div class="input-group mb-3">
-          {% csrf_token %}
-          <input type="text" name="search" class="form-control" aria-label="Username">
-      </div>
-      <p>
-        <button type="submit" name="submit" value="search" class="btn btn-primary my-2">YouTube Search</button>
-        <button type="submit" name="submit" value="lucky" class="btn btn-secondary my-2">I'm Feeling Lucky</button>
-      </p>
-      </form>
-    </div>
-  </section>
+  <div class="container-fluid">
+    <div class="row">
+      <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+        <div class="sidebar-sticky pt-3">
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a class="nav-link active" href="#">
+                <span data-feather="home"></span>
+                Dashboard
+                <span class="sr-only">(current)</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                <span data-feather="layers"></span>
+                Football
+              </a>
+            </li>
+          </ul>
 
-  <div class="album py-5 bg-light">
-    <div class="container">
-      <div class="row">
-        {% for video in videos %}
-        <div class="col-md-4">
-          <div class="card mb-4 shadow-sm">
-            <img class="bd-placeholder-img card-img-top" width="100%" height="225" src="{{ video.thumbnail }}" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"></img>
-            <div class="card-body">
-              <p class="card-text">{{ video.title }}</p>
-              <div class="d-flex justify-content-between align-items-center">
-                <div class="btn-group">
-                  <a type="button" href="{{ video.url }}" class="btn btn-sm btn-outline-secondary">View</a>
-                </div>
-                <small class="text-muted">{{ video.duration }} mins</small>
-              </div>
-            </div>
-          </div>
+          <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted"></h6>
+          <ul class="nav flex-column mb-2"></ul>
         </div>
-        {% endfor %}
-      </div>
+      </nav>
+
+      <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+        <div
+          class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+          <h1 class="h2">Dashboard | Football Feed</h1>
+        </div>
+
+        <h4>Latest Videos:</h4>
+        <div class="table-responsive">
+          <!-- <table class="d" id="a"></table> -->
+          <table class="table table-striped table-sm" id="table_1">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Desciption</th>
+                <th>Date and Time</th>
+                <th>Video ID</th>
+                <th>Thumbnail url</th>
+              </tr>
+            </thead>
+            <tbody>
+              <div class="pagination">
+                {% if Videos.has_previous %}
+                <a class="pagination-action" href="?page=1">
+                  << </a>
+                    <a class="pagination-action" href="?page={{Videos.previous_page_number}}">
+                      < </a>
+                        {% endif %}
+                        {% for num in Videos.paginator.page_range %}
+                        {% if Videos.number == num %}
+                        <span class="pagination-number pagination-current">{{num}} </span>
+                        {% else %}
+                        <a class="pagination-number" href="?page={{ num }}">{{num}} </a>
+                        {% endif %}
+
+                        {% endfor %}
+                        {% if Videos.has_next %}
+                        <a class="pagination-action" href="?page={{Videos.next_page_number }}">> </a>
+                        <a class="pagination-action" href="?page={{Videos.paginator.num_pages}}"> >> </a>
+                        {% endif %}
+              </div>
+
+              {% for video in Videos %}
+              <tr>
+                <td>{{video.title}}</td>
+                <td>{{video.description}}</td>
+                <td>{{video.published_at}}</td>
+                <td><a href="https://www.youtube.com/watch?v={{video.vid_id}}"" color=" blue">{{video.vid_id}}</a></td>
+                <td><a href={{video.thumbnail_url}}><img src={{video.thumbnail_url}} width="120" height="80"></a></td>
+              </tr>
+              {% endfor %}
+              
+            </tbody>
+          </table>
+        </div>
+      </main>
     </div>
   </div>
-
-</main>
+  <!-- <script
+      src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      window.jQuery ||
+        document.write(
+          '<script src="./assets/js/vendor/jquery.slim.min.js"><\/script>'
+        );
+    </script>
+    <script src="{% static './assets/dist/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script> -->
 </body>
+
 </html>

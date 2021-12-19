@@ -1,11 +1,30 @@
 import requests
-
 from isodate import parse_duration
-
 from django.conf import settings
 from django.shortcuts import render, redirect
 
+from .models import Feed
+from .tasks import populate_db
+from django.core.paginator import Paginator
+from background_task.models import Task
+
+def pre_task(repeat):
+
+    Task.objects.all().delete()
+    populate_db(repeat=repeat)
+
 def index(request):
+    # datatable dashboard view
+    pre_task(repeat=100)
+    all_videos = Feed.objects.all().order_by('-published_at')
+    paginator = Paginator(all_videos, 20)
+    page = request.GET.get('page')
+    videos = paginator.get_page(page)
+    return render(request, 'video_search/index.html', {'Videos': videos})
+
+
+def search(request):
+    # youtube search view
     videos = []
 
     if request.method == 'POST':
@@ -58,4 +77,4 @@ def index(request):
         'videos' : videos
     }
     
-    return render(request, 'video_search/index.html', context)
+    return render(request, 'video_search/search.html', context)
