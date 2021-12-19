@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'video_search',
+    'background_task',
 ]
 
 MIDDLEWARE = [
