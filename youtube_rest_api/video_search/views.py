@@ -8,6 +8,15 @@ from .tasks import populate_db
 from django.core.paginator import Paginator
 from background_task.models import Task
 
+from rest_framework import serializers, viewsets
+from .serializers import FeedSerializer
+from rest_framework.pagination import PageNumberPagination
+
+class StandardResultsSetPagination(PageNumberPagination):
+    page_size = 20
+    page_size_query_param = 'page_size'
+    max_page_size = 100
+
 def pre_task(repeat):
 
     Task.objects.all().delete()
@@ -21,6 +30,13 @@ def index(request):
     page = request.GET.get('page')
     videos = paginator.get_page(page)
     return render(request, 'video_search/index.html', {'Videos': videos})
+
+class FeedViewSet(viewsets.ModelViewSet):
+    pagination_class = StandardResultsSetPagination
+    queryset = Feed.objects.all().order_by('-published_at')
+    serializer_class = FeedSerializer
+# ModelViewSet is a special view that Django Rest Framework provides.
+# It will handle GET and POST for Heroes without us having to do any more work.
 
 
 def search(request):
