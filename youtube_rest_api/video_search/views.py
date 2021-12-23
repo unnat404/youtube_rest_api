@@ -32,6 +32,7 @@ def index(request):
     return render(request, 'video_search/index.html', {'Videos': videos})
 
 class FeedViewSet(viewsets.ModelViewSet):
+    # Pagination is only performed automatically if you're using the generic views or viewsets
     pagination_class = StandardResultsSetPagination
     queryset = Feed.objects.all().order_by('-published_at')
     serializer_class = FeedSerializer
@@ -39,6 +40,7 @@ class FeedViewSet(viewsets.ModelViewSet):
 # It will handle GET and POST for Heroes without us having to do any more work.
 
 
+# search view : shows a list of top 9 searched query on YouTube
 def search(request):
     # youtube search view
     videos = []

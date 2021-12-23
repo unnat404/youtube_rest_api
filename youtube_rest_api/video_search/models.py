@@ -17,4 +17,7 @@ class Feed(models.Model):
             models.Index(fields=['-published_at']),
             models.Index(fields=['vid_id'])
         ]
+    
+    def __str__(self):
+        return self.title
 

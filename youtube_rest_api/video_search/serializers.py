@@ -5,4 +5,4 @@ class FeedSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Feed
         fields = ('title','description','published_at','thumbnail_url','vid_id')
-        
+        # fiels = '__all__'
