@@ -25,6 +25,9 @@
     </style>
     <!-- Custom styles for this template -->
     <link href="{% static 'video_search/album.css' %}" rel="stylesheet">
+
+    <base href="http://127.0.0.1:8000/" target="_blank">
+    <!-- Modify the new base url here or get it from backend as a context variable  -->
   </head>
   <body>
 
@@ -41,7 +44,14 @@
       </div>
       <p>
         <button type="submit" name="submit" value="search" class="btn btn-primary my-2">YouTube Search</button>
-        <button type="submit" name="submit" value="lucky" class="btn btn-secondary my-2">I'm Feeling Lucky</button>
+        <button type="submit" name="submit" value="lucky" class="btn btn-secondary my-2 addMore" title="sample text">I'm Feeling Lucky</button>  
+        <!-- &#9432;   -->
+      </p>
+      <hr>
+
+      <p>
+        <!-- <button class="btn btn-success" onclick=" window.open('http://google.com','_blank')"> Google</button> -->
+        <a class="btn btn-dark" href="dashboard/" target="_blank"> Dashboard </a>
       </p>
       </form>
     </div>
